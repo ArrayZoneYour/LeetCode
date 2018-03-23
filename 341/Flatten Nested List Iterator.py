@@ -36,12 +36,15 @@ class NestedIterator(object):
         :type nestedList: List[NestedInteger]
         """
         self.stack = []
+        for nestedInteger in nestedList:
+            self.collect_el(nestedInteger)
+        self.stack.reverse()
 
-    def collect_el(self, nestedList):
-        if nestedList.isInteger():
-            self.stack.append(nestedList.getInteger())
+    def collect_el(self, nestedInteger):
+        if nestedInteger.isInteger():
+            self.stack.append(nestedInteger.getInteger())
         else:
-            for el in nestedList.getList():
+            for el in nestedInteger.getList():
                 self.collect_el(el)
 
 
@@ -49,9 +52,7 @@ class NestedIterator(object):
         """
         :rtype: int
         """
-        res = self.stack[0]
-        del self.stack[0]
-        return res
+        return self.stack.pop()
 
     def hasNext(self):
         """
