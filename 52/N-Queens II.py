@@ -9,12 +9,12 @@ class Solution:
         self.row_status = []
         self.dia_status_1 = []
         self.dia_status_2 = []
-        self.result = []
+        self.result = 0
 
     def placeQueen(self, row, n):
         if row == n:
             tmp = [''.join(el) for el in self.board]
-            self.result.append(tmp)
+            self.result += 1
             return
         for i in range(n):
             if self.col_status[i] and self.dia_status_1[i+row] and self.dia_status_2[row-i]:
@@ -28,7 +28,7 @@ class Solution:
                 self.dia_status_1[i+row] = True
                 self.dia_status_2[row-i] = True
 
-    def solveNQueens(self, n):
+    def totalNQueens(self, n):
         """
         :type n: int
         :rtype: List[List[str]]
