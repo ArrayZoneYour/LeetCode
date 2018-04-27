@@ -13,40 +13,43 @@ class Solution:
     # @return a undirected graph node
     def __init__(self):
         self.visited_label = {}
+        self.create_node = {}
 
     # DFS recursively
-    def cloneGraph(self, node):
-        if not node:
-            return
-        nodeCopy = UndirectedGraphNode(node.label)
-        dic = {node: nodeCopy}
-        self.dfs(node, dic)
-        return nodeCopy
-
-    def dfs(self, node, dic):
-        for neighbor in node.neighbors:
-            if neighbor not in dic:
-                neighborCopy = UndirectedGraphNode(neighbor.label)
-                dic[neighbor] = neighborCopy
-                dic[node].neighbors.append(neighborCopy)
-                self.dfs(neighbor, dic)
-            else:
-                dic[node].neighbors.append(dic[neighbor])
-
     # def cloneGraph(self, node):
     #     if not node:
     #         return
-    #     clone_node = UndirectedGraphNode(node.label)
-    #     self.clone_graph(node, clone_node)
-    #     return clone_node
+    #     nodeCopy = UndirectedGraphNode(node.label)
+    #     dic = {node: nodeCopy}
+    #     self.dfs(node, dic)
+    #     return nodeCopy
     #
-    # def clone_graph(self, node, clone_node):
-    #     if node.label not in self.visited_label:
-    #         self.visited_label[node.label] = clone_node
-    #         for neighbor in node.neighbors:
-    #             if neighbor.label in self.visited_label:
-    #                 clone_node.neighbors.append(self.visited_label[neighbor.label])
-    #             else:
-    #                 clone_node.neighbors.append(UndirectedGraphNode(neighbor.label))
-    #         for neighbor, clone_neighbor in zip(node.neighbors, clone_node.neighbors):
-    #             self.clone_graph(neighbor, clone_neighbor)
+    # def dfs(self, node, dic):
+    #     for neighbor in node.neighbors:
+    #         if neighbor not in dic:
+    #             neighborCopy = UndirectedGraphNode(neighbor.label)
+    #             dic[neighbor] = neighborCopy
+    #             dic[node].neighbors.append(neighborCopy)
+    #             self.dfs(neighbor, dic)
+    #         else:
+    #             dic[node].neighbors.append(dic[neighbor])
+
+    def cloneGraph(self, node):
+        if not node:
+            return
+        clone_node = UndirectedGraphNode(node.label)
+        self.create_node[node.label] = clone_node
+        self.clone_graph(node, clone_node)
+        return clone_node
+
+    def clone_graph(self, node, clone_node):
+        if node.label not in self.visited_label:
+            self.visited_label[node.label] = clone_node
+            for neighbor in node.neighbors:
+                if neighbor.label in self.create_node:
+                    clone_node.neighbors.append(self.create_node[neighbor.label])
+                else:
+                    self.create_node[neighbor.label] = UndirectedGraphNode(neighbor.label)
+                    clone_node.neighbors.append(self.create_node[neighbor.label])
+            for neighbor, clone_neighbor in zip(node.neighbors, clone_node.neighbors):
+                self.clone_graph(neighbor, clone_neighbor)
